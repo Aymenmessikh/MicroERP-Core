@@ -1,0 +1,27 @@
+::ng-deep .profile-popover {
+    .p-popover-content {
+        padding: 0 !important;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--surface-200);
+    }
+
+    .dark & .p-popover-content {
+        border-color: var(--surface-700);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Animation for the chevron icon */
+.layout-topbar-action i.pi-chevron-down {
+    transition: transform 0.2s ease-in-out;
+}
+
+.layout-topbar-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .layout-topbar-action:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

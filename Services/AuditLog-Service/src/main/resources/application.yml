@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: AuditLog-Service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+jwt:
+  secret: 6fbe9c2f04e6fbc82a52d92a9834a17cb09f376abb914edb1ef9c1adf3043e51d82cd8572c91fa8cbd7a93ea6d6fc38b4e7c77d1883dfe0a833cf9c32f2bcfbf
+  auth:
+    converter:
+      principle-attribute: username
+      #      principle-attribute: preferred_username
+      resource-id: admin-service
+
+permission-service:
+  uri: http://localhost:8090/api/v1/admin/permission
+  authority-param-name: authority
+  module-param-name: module
+  module-name: audit-log

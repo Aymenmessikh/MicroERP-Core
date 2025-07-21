@@ -1,0 +1,12 @@
+::ng-deep .p-picklist .p-button {
+    background-color: #22c55f !important;
+    border-color: var(--primary-500) !important;
+    color: white !important;
+}
+.overlay-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}

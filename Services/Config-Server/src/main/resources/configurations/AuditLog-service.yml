@@ -1,0 +1,78 @@
+server:
+  port: 8092
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Audit-log
+    username: postgres
+    password: aymenmessikh2002
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#  flyway:
+#    baseline-on-migrate: true
+#    enabled: true
+    #    user: postgres
+    #    password: aymenmessikh2002
+#    baseline-description: "init"
+#    baseline-version: 0
+#    locations: classpath:db/migration
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:8080/realms/NFR
+#          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: aymenmessikh.imsi.enpo@gmail.com
+#    password: mrbk wbme ciro zjnr
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#jwt:
+#  auth:
+#    converter:
+#      resource-id: NFR
+#      principle-attribute: preferred_username
+#
+#logging:
+#  level:
+#    org:
+#      keycloak: DEBUG
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, info, metrics, prometheus
+#  metrics:
+#    distribution:
+#      percentiles-histogram:
+#        http:
+#          server:
+#            requests: true
+#  observations:
+#    key-values:
+#      application: admin-service
+
+
+module_name: Audit-log-module
+

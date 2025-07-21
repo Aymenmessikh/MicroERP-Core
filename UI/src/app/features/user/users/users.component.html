@@ -1,0 +1,134 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" routerLink="/users/create" />
+        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined
+                  (onClick)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length" />
+    </ng-template>
+
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="users"
+    [rows]="rows"
+    [lazy]="true"
+    [paginator]="true"
+    [loading]="isLoading"
+    (onFilter)="onFilter($event)"
+    [totalRecords]="totalRecords"
+    paginatorDropdownAppendTo="body"
+    [rowsPerPageOptions]="[10,15,25]"
+    (onLazyLoad)="onPageChange($event)"
+    dataKey="id"
+    selectionMode="multiple"
+    [(selection)]="selectedUsers"
+
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Users</h5>
+            <p-iconfield class="search-container">
+                <p-inputicon styleClass="pi pi-search search-icon" />
+                <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." class="search-input" />
+            </p-iconfield>
+
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="Name" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Name
+                    <p-sortIcon field="Name"/>
+                    <p-columnFilter type="text" field="firstName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="userName" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    User Name
+                    <p-sortIcon field="userName"/>
+                    <p-columnFilter type="text" field="userName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="email" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Email
+                    <p-sortIcon field="email" />
+                    <p-columnFilter type="text" field="email" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="phoneNumber" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Phone Number
+                    <p-sortIcon field="phoneNumber" />
+                    <p-columnFilter type="text" field="phoneNumber" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="actifProfile" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Actif Profile
+                    <p-sortIcon field="actifProfile" />
+                    <p-columnFilter type="text" field="actifProfile" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="active">Status <p-sortIcon field="active"></p-sortIcon></th>
+            <th style="min-width: 10rem">Actions</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-user>
+        <tr (click)="showUserDetails(user.id)">
+            <td><p-tableCheckbox [value]="user" (click)="$event.stopPropagation()"></p-tableCheckbox></td>
+            <td>{{ user.firstName }} {{user.lastName}}</td>
+            <td>{{ user.userName}}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phoneNumber }}</td>
+            <td>{{ user.actifProfile.libelle}}</td>
+            <td>
+                <p-button
+                    [label]="user.actif ? 'Actif' : 'Inactif'"
+                    [severity]="user.actif ? 'success' : 'danger'"
+                    (click)="confirmActifAndDisactif(user.id,user.actif);$event.stopPropagation()"
+                ></p-button>
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" outlined (click)="updateUser(user.id);$event.stopPropagation()" />
+                <p-button icon="pi pi-trash" severity="danger" outlined (click)="confirmDelete(user.id);$event.stopPropagation()" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete this user?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteUser()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDelete()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayActifConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>{{messageConfirmation}}</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="{{yesConfirmation}}" icon="pi pi-check" (click)="toggleUserStatus()" severity="danger" outlined autofocus />
+        <p-button label="{{noConfirmation}}" icon="pi pi-times" (click)="cancelActifDisactif()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayDeleteSelectedConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete the selected users?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteSelectedUsersConfirmed()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDeleteSelected()" text />
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,69 @@
+<p-toolbar styleClass="mb-3">
+    <ng-template #start>
+        <div class="font-semibold text-xl">Create Module</div>
+    </ng-template>
+</p-toolbar>
+<div class="card flex flex-col gap-8">
+    <form [formGroup]="createModuleForm" (ngSubmit)="createModule()" class="flex flex-col gap-8">
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="moduleName">Module Name</label>
+                <input pInputText id="moduleName" type="text" formControlName="moduleName" placeholder="Module Name"  class="limited-width"/>
+                <small *ngIf="createModuleForm.get('moduleName').invalid && createModuleForm.get('moduleName').touched"
+                       class="text-red-500">
+                    Module Name is required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="color">Color</label>
+                <input pInputText id="color" type="text" formControlName="color" placeholder="Color" class="limited-width"/>
+                <small *ngIf="createModuleForm.get('color').invalid && createModuleForm.get('color').touched"
+                       class="text-red-500">
+                    Color is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="moduleCode">Module Code</label>
+                <input pInputText id="moduleCode" type="text" formControlName="moduleCode" placeholder="Module Code" class="limited-width"/>
+                <small *ngIf="createModuleForm.get('moduleCode').invalid && createModuleForm.get('moduleCode').touched"
+                       class="text-red-500">
+                    Module Code is required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="moduleName">Icon</label>
+                <p-fileUpload
+                    mode="basic"
+                    name="icon"
+                    accept="image/*"
+                    maxFileSize="1000000"
+                    chooseLabel="Choose Icon"
+                    (onSelect)="onIconSelect($event)"
+                    [class.ng-invalid]="createModuleForm.get('icon')?.invalid && createModuleForm.get('icon')?.touched">
+                </p-fileUpload>
+<!--                <input pInputText id="icon" type="text" formControlName="icon" placeholder="Icon" class="limited-width"/>-->
+                <small *ngIf="createModuleForm.get('icon').invalid && createModuleForm.get('icon').touched"
+                       class="text-red-500">
+                    Icon is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="moduleName">Uri</label>
+                <input pInputText id="uri" type="text" formControlName="uri" placeholder="Uri" class="limited-width"/>
+                <small *ngIf="createModuleForm.get('uri').invalid && createModuleForm.get('uri').touched"
+                       class="text-red-500">
+                    Uri is required
+                </small>
+            </div>
+        </div>
+        <div class="flex justify-start">
+            <p-button label="Create" type="submit" class="w-50 h-12" [disabled]="createModuleForm.invalid" />
+            <p-button label="Cancel" class="cancel w-50 h-12" severity="danger" outlined (click)="cancel()" />
+        </div>
+    </form>
+</div>
+

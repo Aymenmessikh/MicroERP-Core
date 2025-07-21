@@ -1,0 +1,37 @@
+server:
+  port: 8089
+
+#spring:
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#      routes:
+#        - id: admin-service
+#          uri: lb://admin-service
+#          predicates:
+#            - Path=/api/v1/admin/**
+#        - id: notification-service
+#          uri: lb://notification-service
+#          predicates:
+#            - Path=/api/v1/notification/**
+#        - id: discovery-service
+#          uri: http://localhost:8761
+#          predicates:
+#            - Path=/eureka/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: Api-Gateway

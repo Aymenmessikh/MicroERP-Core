@@ -1,0 +1,91 @@
+<p-table
+    #dt
+    [value]="auditResponseDto"
+    [rows]="rows"
+    [lazy]="true"
+    [paginator]="true"
+    [loading]="isLoading"
+    (onFilter)="onFilter($event)"
+    [totalRecords]="totalRecords"
+    paginatorDropdownAppendTo="body"
+    [rowsPerPageOptions]="[10,15,25]"
+    (onLazyLoad)="onPageChange($event)"
+    dataKey="id"
+    selectionMode="multiple"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Audit Logs</h5>
+            <p-iconfield class="search-container">
+                <p-inputicon styleClass="pi pi-search search-icon" />
+                <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." class="search-input" />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width:5rem">#</th>
+            <th pSortableColumn="httpMethod" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Http Method
+                    <p-sortIcon field="httpMethod"/>
+                    <p-columnFilter type="text" field="httpMethod" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="entityName" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Entity Name
+                    <p-sortIcon field="entityName"/>
+                    <p-columnFilter type="text" field="entityName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="methodName" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Method Name
+                    <p-sortIcon field="methodName" />
+                    <p-columnFilter type="text" field="methodName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="timestamp" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    time Stamp
+                    <p-sortIcon field="timestamp" />
+                    <p-columnFilter type="text" field="timestamp" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="status" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Status
+                    <p-sortIcon field="status" />
+                    <p-columnFilter type="text" field="status" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="moduleName" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Module Name
+                    <p-sortIcon field="moduleName" />
+                    <p-columnFilter type="text" field="moduleName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="username" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    User Name
+                    <p-sortIcon field="username" />
+                    <p-columnFilter type="text" field="username" display="menu" class="ml-auto" />
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-audit_log let-rowIndex="rowIndex">
+        <tr (click)="showUserDetails(audit_log.id)">
+            <td>{{ rowIndex + 1 }}</td>
+            <td [ngClass]="getHttpMethodClass(audit_log.httpMethod)">{{ audit_log.httpMethod }}</td>
+            <td>{{ audit_log.entityName}}</td>
+            <td>{{ audit_log.methodName }}</td>
+            <td>Le {{ audit_log.timestamp | date:'dd/MM/yyyy' }} à {{ audit_log.timestamp | date:'HH:mm:ss' }}</td>
+            <td [ngClass]="{'status-success': audit_log.status === 'SUCCESS', 'status-failed': audit_log.status === 'FAILED'}">{{ audit_log.status}}</td>
+            <td>{{ audit_log.moduleName}}</td>
+            <td>{{ audit_log.username}}</td>
+        </tr>
+    </ng-template>
+</p-table>

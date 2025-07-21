@@ -1,0 +1,122 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" routerLink="/modules/create" />
+    </ng-template>
+    <!--    <ng-template #end>-->
+    <!--        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />-->
+    <!--    </ng-template>-->
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="modules"
+    [rows]="rows"
+    [paginator]="true"
+    [loading]="isLoading"
+    paginatorDropdownAppendTo="body"
+    dataKey="id"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Modules</h5>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="moduleName" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Module Name
+                    <p-sortIcon field="moduleName" />
+                </div>
+            </th>
+            <th pSortableColumn="moduleCode" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Module Code
+                    <p-sortIcon field="moduleCode" />
+                </div>
+            </th>
+            <th pSortableColumn="uri" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Uri
+                    <p-sortIcon field="uri" />
+                </div>
+            </th>
+            <th pSortableColumn="color" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Color
+                    <p-sortIcon field="color" />
+                </div>
+            </th>
+<!--            <th pSortableColumn="icon" style="min-width: 10rem">-->
+<!--                <div class="flex justify-between items-center">-->
+<!--                    Icon-->
+<!--                </div>-->
+<!--            </th>-->
+
+            <th pSortableColumn="active">Status
+                <p-sortIcon field="active"></p-sortIcon>
+            </th>
+            <th style="max-width: 6rem">Actions</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-module>
+        <tr (click)="showModuleDetails(module.id)">
+            <td>
+                <p-tableCheckbox [value]="module"  (click)="$event.stopPropagation()"></p-tableCheckbox>
+            </td>
+            <td>{{ module.moduleName }}</td>
+            <td>{{ module.moduleCode }}</td>
+            <td>{{ module.uri }}</td>
+            <td>{{ module.color }}</td>
+<!--            <td>{{ module.icon }}</td>-->
+            <td>
+                <p-button
+                    [label]="module.actif ? 'Actif' : 'Inactif'"
+                    [severity]="module.actif ? 'success' : 'danger'"
+                    (click)="confirmActifAndDisactif(module.id,module.actif);$event.stopPropagation()"
+                ></p-button>
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" outlined
+                          (click)="updateModule(module.id) ;$event.stopPropagation()" />
+                <p-button icon="pi pi-trash" severity="danger" outlined
+                          (click)="confirmDelete(module.id) ;$event.stopPropagation()" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete this Authority?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteModule()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDelete()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayActifConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>{{messageConfirmation}}</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="{{yesConfirmation}}" icon="pi pi-check" (click)="toggleModuleStatus()" severity="danger" outlined autofocus />
+        <p-button label="{{noConfirmation}}" icon="pi pi-times" (click)="cancelActifDisactif()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayDeleteSelectedConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete the selected Authorities?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteSelectedUsersConfirmed()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDeleteSelected()" text />
+    </ng-template>
+</p-dialog>

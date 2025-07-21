@@ -1,0 +1,71 @@
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 280px; /* Ajuste la largeur */
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    color: #6c757d; /* Couleur grise */
+    font-size: 1.2rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 10px 10px 35px; /* Décalage pour l'icône */
+    border: 2px solid #ced4da;
+    border-radius: 10px; /* Coins arrondis */
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    font-size: 1rem;
+}
+
+/* Effet au focus */
+.search-input:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 8px rgba(var(--primary-color-rgb), 0.3) !important;
+}
+
+/* Effet hover */
+.search-input:hover {
+    border-color: #6c757d;
+}
+
+/* CSS for Status */
+.status-success {
+    color: green;
+    font-weight: bold;
+}
+
+.status-failed {
+    color: red;
+    font-weight: bold;
+}
+
+/* CSS for HTTP Methods */
+.http-get {
+    color: green;
+    font-weight: bold;
+}
+
+.http-post {
+    color: orange;
+    font-weight: bold;
+}
+
+.http-put {
+    color: blue;
+    font-weight: bold;
+}
+
+.http-delete {
+    color: red;
+    font-weight: bold;
+}
+
+.http-patch {
+    color: purple;
+    font-weight: bold;
+}

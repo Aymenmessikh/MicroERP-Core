@@ -1,0 +1,125 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" routerLink="/roles/create" />
+        <p-button
+            severity="secondary"
+            label="Delete"
+            icon="pi pi-trash"
+            outlined
+            (onClick)="deleteSelectedRolesConfirmation()"
+            [disabled]="!selectedRoles || selectedRoles.length === 0"
+        />
+    </ng-template>
+    <!--    <ng-template #end>-->
+    <!--        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />-->
+    <!--    </ng-template>-->
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="roles"
+    [rows]="rows"
+    [lazy]="true"
+    [paginator]="true"
+    [loading]="isLoading"
+    (onFilter)="onFilter($event)"
+    [totalRecords]="totalRecords"
+    paginatorDropdownAppendTo="body"
+    [rowsPerPageOptions]="[10,15,25]"
+    (onLazyLoad)="onPageChange($event)"
+    dataKey="id"
+    selectionMode="multiple"
+    [(selection)]="selectedRoles"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Roles</h5>
+            <p-iconfield class="search-container">
+                <p-inputicon styleClass="pi pi-search search-icon" />
+                <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..."
+                       class="search-input" />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="libelle" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Libelle
+                    <p-sortIcon field="libelle" />
+                    <p-columnFilter type="text" field="libelle" display="menu" class="ml-auto" />
+                </div>
+            </th>
+            <th pSortableColumn="module" style="min-width: 10rem">
+                <div class="flex justify-between items-center">
+                    Module
+                    <p-sortIcon field="module" />
+                    <p-columnFilter type="text" field="module.moduleName" display="menu" class="ml-auto" />
+                </div>
+            </th>
+
+            <th pSortableColumn="active">Status
+                <p-sortIcon field="active"></p-sortIcon>
+            </th>
+            <th style="max-width: 6rem">Actions</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-role>
+        <tr (click)="showRoleDetails(role.id)">
+            <td>
+                <p-tableCheckbox [value]="role"  (click)="$event.stopPropagation()"></p-tableCheckbox>
+            </td>
+            <td>{{ role.libelle }}</td>
+            <td>{{ role.module.moduleName }}</td>
+            <td>
+                <p-button
+                    [label]="role.actif ? 'Actif' : 'Inactif'"
+                    [severity]="role.actif ? 'success' : 'danger'"
+                    (click)="confirmActifAndDisactif(role.id,role.actif);$event.stopPropagation()"
+                ></p-button>
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" outlined
+                          (click)="updateRole(role.id) ;$event.stopPropagation()" />
+                <p-button icon="pi pi-trash" severity="danger" outlined
+                          (click)="confirmDelete(role.id) ;$event.stopPropagation()" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete this Role?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteRole()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDelete()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayActifConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>{{messageConfirmation}}</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="{{yesConfirmation}}" icon="pi pi-check" (click)="toggleRoleStatus()" severity="danger" outlined autofocus />
+        <p-button label="{{noConfirmation}}" icon="pi pi-times" (click)="cancelActifDisactif()" text />
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayDeleteSelectedConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to delete the selected Roles?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="Delete" icon="pi pi-check" (click)="deleteSelectedUsersConfirmed()" severity="danger" outlined autofocus />
+        <p-button label="Cancel" icon="pi pi-times" (click)="cancelDeleteSelected()" text />
+    </ng-template>
+</p-dialog>
+

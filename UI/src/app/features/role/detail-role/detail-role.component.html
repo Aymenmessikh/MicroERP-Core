@@ -1,0 +1,69 @@
+<p-blockui [blocked]="isLoading"></p-blockui>
+<div *ngIf="!isLoading">
+    <p-toolbar styleClass="mb-6">
+        <ng-template #start styleClass="ml-6">
+            <h5 class="m-0">{{ roleResponse.libelle }}</h5>
+        </ng-template>
+        <ng-template #center>
+            <h5 class="m-0">{{ roleResponse.module.moduleName }}</h5>
+        </ng-template>
+        <ng-template #end styleClass="mr-6">
+            <p-button
+                [label]="roleResponse.actif ? 'Actif' : 'Inactif'"
+                [severity]="roleResponse.actif ? 'success' : 'danger'"
+                (click)="confirmActifAndDisactif(roleResponse.id,roleResponse.actif)"
+            ></p-button>
+        </ng-template>
+    </p-toolbar>
+
+
+    <div class="card">
+        <p-picklist
+            [source]="moduleAuthoritiesExcludingRoleAuthorities"
+            [target]="roleAuthority"
+            [dragdrop]="true"
+            [responsive]="true"
+            [sourceStyle]="{ height: '30rem' }"
+            [targetStyle]="{ height: '30rem' }"
+            filterBy="libelle"
+            sourceFilterPlaceholder="Search by name"
+            targetFilterPlaceholder="Search by name"
+            breakpoint="1400px"
+            scrollHeight="30rem"
+            sourceHeader="Available Authorities"
+            targetHeader="Assigned Authorities"
+            [trackBy]="trackByFn"
+            (onMoveToTarget)="onMoveToTarget($event)"
+            (onMoveToSource)="onMoveToSource($event)"
+            (onMoveAllToTarget)="onMoveAllToTarget($event)"
+            (onMoveAllToSource)="onMoveAllToSource($event)"
+        >
+            <ng-template pTemplate="sourceHeader">
+                <h5 class="text-center">Available Authorities</h5>
+            </ng-template>
+
+            <ng-template pTemplate="targetHeader">
+                <h5 class="text-center">Assigned Authorities</h5>
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+                <div class="flex flex-wrap p-1 items-center gap-4 w-full">
+                    <div class="flex-1 flex flex-col">
+                        <span class="font-medium text-sm">{{ item.libelle }}</span>
+                    </div>
+                </div>
+            </ng-template>
+        </p-picklist>
+    </div>
+</div>
+
+<p-dialog header="Confirmation" [(visible)]="displayActifConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>{{messageConfirmation}}</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="{{yesConfirmation}}" icon="pi pi-check" (click)="toggleRoleStatus()" severity="danger" outlined autofocus />
+        <p-button label="{{noConfirmation}}" icon="pi pi-times" (click)="cancelActifDisactif()" text />
+    </ng-template>
+</p-dialog>

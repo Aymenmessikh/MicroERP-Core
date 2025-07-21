@@ -1,0 +1,105 @@
+<p-toolbar styleClass="mb-3">
+    <ng-template #start>
+        <div class="font-semibold text-xl">Create User</div>
+    </ng-template>
+</p-toolbar>
+<div class="card flex flex-col gap-8">
+    <form [formGroup]="createUserForm" class="flex flex-col gap-8">
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="firstName">First Name</label>
+                <input pInputText id="firstName" type="text" formControlName="firstName" />
+                <small *ngIf="createUserForm.get('firstName').invalid && createUserForm.get('firstName').touched"
+                       class="text-red-500">
+                    First Name is required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="lastName">Last Name</label>
+                <input pInputText id="lastName" type="text" formControlName="lastName" />
+                <small *ngIf="createUserForm.get('lastName').invalid && createUserForm.get('lastName').touched"
+                       class="text-red-500">
+                    Last Name is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="userName">User Name</label>
+                <input pInputText id="userName" type="text" formControlName="userName" />
+                <small *ngIf="createUserForm.get('userName').invalid && createUserForm.get('userName').touched"
+                       class="text-red-500">
+                    User Name is required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="email">Email</label>
+                <input pInputText id="email" type="text" formControlName="email" />
+                <small *ngIf="createUserForm.get('email').invalid && createUserForm.get('email').touched"
+                       class="text-red-500">
+                    Valid email is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="phoneNumber">Phone Number</label>
+                <input pInputText id="phoneNumber" type="text" formControlName="phoneNumber" />
+                <small *ngIf="createUserForm.get('phoneNumber').invalid && createUserForm.get('phoneNumber').touched"
+                       class="text-red-500">
+                    Phone Number is required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label>Select Profile Type</label>
+                <p-treeSelect
+                    *ngIf="usersTreeNodes.length > 0"
+                    [options]="usersTreeNodes"
+                    (onNodeSelect)="onProfileSelect($event)"
+                    placeholder="Sélectionnez un profil"
+                    class="w-full">
+                </p-treeSelect>
+            </div>
+
+
+        </div>
+        <!--        <div class="flex flex-wrap gap-24">-->
+        <!--            <div class="flex flex-col grow basis-0 gap-2">-->
+        <!--                <label for="password">Password</label>-->
+        <!--                <input pInputText id="password" type="password" formControlName="password" />-->
+        <!--                <small *ngIf="createUserForm.get('password').invalid && createUserForm.get('password').touched"-->
+        <!--                       class="text-red-500">-->
+        <!--                    Password must be at least 8 characters-->
+        <!--                </small>-->
+        <!--            </div>-->
+        <!--            <div class="flex flex-col grow basis-0 gap-2">-->
+        <!--                <label for="confirmPassword">Confirm Password</label>-->
+        <!--                <input pInputText id="confirmPassword" type="password" formControlName="confirmPassword" />-->
+        <!--                <small *ngIf="createUserForm.hasError('passwordMismatch')"-->
+        <!--                       class="text-red-500">-->
+        <!--                    Passwords do not match-->
+        <!--                </small>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="address">Wallet Address</label>
+                <input pInputText id="address" type="password" formControlName="address" />
+                <small *ngIf="createUserForm.get('address').touched"
+                       class="text-red-500">
+                    Wallet Address in Required
+                </small>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+
+            </div>
+        </div>
+
+        <div class="flex justify-start">
+            <p-button label="Create" type="submit" (click)="onSubmit()" class="w-50 h-12"
+                      [disabled]="createUserForm.invalid" />
+            <p-button label="Cancel" class="cancel w-50 h-12" severity="danger" outlined (click)="onCancel()" />
+        </div>
+    </form>
+</div>
+

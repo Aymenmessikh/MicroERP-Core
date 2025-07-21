@@ -1,0 +1,220 @@
+<p-blockui [blocked]="isLoading"></p-blockui>
+<p-toolbar styleClass="mb-4">
+    <ng-template #start styleClass="ml-6">
+        <h5 class="m-0">{{ moduleResponse.moduleName }}</h5>
+    </ng-template>
+    <ng-template #center>
+        <h5 class="m-0">{{ moduleResponse.moduleCode }}</h5>
+    </ng-template>
+    <ng-template #end styleClass="mr-6">
+        <p-button
+            [label]="moduleResponse.actif ? 'Actif' : 'Inactif'"
+            [severity]="moduleResponse.actif ? 'success' : 'danger'"
+            (click)="confirmActifAndDisactif(moduleResponse.id,moduleResponse.actif)"
+        ></p-button>
+    </ng-template>
+</p-toolbar>
+@if (!isLoading || moduleName) {
+    <p-tabs value="2" >
+        <p-tablist>
+<!--            <p-tab value="1">Users</p-tab>-->
+            <p-tab value="2">Roles</p-tab>
+            <p-tab value="3">Authorities</p-tab>
+        </p-tablist>
+        <div class="p-1"></div>
+        <p-tabpanels>
+            <p-tabpanel value="1">
+                <p-table
+                    #dt
+                    [value]="users"
+                    [rows]="rows"
+                    [lazy]="true"
+                    [paginator]="true"
+                    [loading]="RoleisLoading"
+                    paginatorDropdownAppendTo="body"
+                    [rowsPerPageOptions]="[10,15,25]"
+                    dataKey="id"
+                >
+                    <ng-template #header>
+                        <tr>
+                            <th pSortableColumn="libelle" style="min-width: 10rem">
+                                <div class="flex justify-between items-center">
+                                    Libelle
+                                    <p-sortIcon field="libelle" />
+                                    <p-columnFilter type="text" field="libelle" display="menu" class="ml-auto" />
+                                </div>
+                            </th>
+                            <th pSortableColumn="module" style="min-width: 10rem">
+                                <div class="flex justify-between items-center">
+                                    Module
+                                </div>
+                            </th>
+
+                            <th pSortableColumn="active">Status
+                                <p-sortIcon field="active"></p-sortIcon>
+                            </th>
+                            <th style="max-width: 6rem">Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-role>
+                        <tr (click)="showRoleDetails(role.id)">
+                            <td>{{ role.libelle }}</td>
+                            <td>{{ role.module.moduleName }}</td>
+                            <td>
+                                <p-button
+                                    [label]="role.actif ? 'Actif' : 'Inactif'"
+                                    [severity]="role.actif ? 'success' : 'danger'"
+                                    (click)="confirmActifAndDisactif(role.id,role.actif);$event.stopPropagation()"
+                                ></p-button>
+                            </td>
+                            <td>
+                                <p-button icon="pi pi-pencil" class="mr-2" outlined
+                                          (click)="updateRole(role.id) ;$event.stopPropagation()" />
+                                <p-button icon="pi pi-trash" severity="danger" outlined
+                                          (click)="confirmDelete(role.id) ;$event.stopPropagation()" />
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+            @if (moduleName){
+                <p-tabpanel value="2" >
+                    <p-table
+                        #dt
+                        [value]="roles"
+                        [rows]="rows"
+                        [lazy]="true"
+                        [paginator]="true"
+                        [loading]="RoleisLoading"
+                        (onFilter)="onFilterRole($event)"
+                        [totalRecords]="totalRecordsRole"
+                        paginatorDropdownAppendTo="body"
+                        [rowsPerPageOptions]="[10,15,25]"
+                        (onLazyLoad)="onPageChangeRole($event)"
+                        dataKey="id"
+                    >
+                        <ng-template #header>
+                            <tr>
+                                <th pSortableColumn="libelle" style="min-width: 10rem">
+                                    <div class="flex justify-between items-center">
+                                        Libelle
+                                        <p-sortIcon field="libelle" />
+                                        <p-columnFilter type="text" field="libelle" display="menu" class="ml-auto" />
+                                    </div>
+                                </th>
+                                <th pSortableColumn="module" style="min-width: 10rem">
+                                    <div class="flex justify-between items-center">
+                                        Module
+                                    </div>
+                                </th>
+
+                                <th pSortableColumn="active">Status
+                                    <p-sortIcon field="active"></p-sortIcon>
+                                </th>
+                                <th style="max-width: 6rem">Actions</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-role>
+                            <tr (click)="showRoleDetails(role.id)">
+                                <td>{{ role.libelle }}</td>
+                                <td>{{ role.module.moduleName }}</td>
+                                <td>
+                                    <p-button
+                                        [label]="role.actif ? 'Actif' : 'Inactif'"
+                                        [severity]="role.actif ? 'success' : 'danger'"
+                                        (click)="confirmActifAndDisactif(role.id,role.actif);$event.stopPropagation()"
+                                    ></p-button>
+                                </td>
+                                <td>
+                                    <p-button icon="pi pi-pencil" class="mr-2" outlined
+                                              (click)="updateRole(role.id) ;$event.stopPropagation()" />
+                                    <p-button icon="pi pi-trash" severity="danger" outlined
+                                              (click)="confirmDelete(role.id) ;$event.stopPropagation()" />
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </p-tabpanel>
+            }
+            @if (moduleName) {
+                <p-tabpanel value="3">
+                    <p-table
+                        #dt
+                        [value]="authoritys"
+                        [rows]="rows"
+                        [lazy]="true"
+                        [paginator]="true"
+                        [loading]="isAuthLoading"
+                        (onFilter)="onFilterAuth($event)"
+                        [totalRecords]="totalRecordsAuth"
+                        paginatorDropdownAppendTo="body"
+                        [rowsPerPageOptions]="[10,15,25]"
+                        (onLazyLoad)="onPageChangeAuth($event)"
+                        dataKey="id"
+                    >
+                        <ng-template #header>
+                            <tr>
+                                <th pSortableColumn="libelle" style="min-width: 10rem">
+                                    <div class="flex justify-between items-center">
+                                        Libelle
+                                        <p-sortIcon field="libelle" />
+                                        <p-columnFilter type="text" field="libelle" display="menu" class="ml-auto" />
+                                    </div>
+                                </th>
+                                <th pSortableColumn="module" style="min-width: 10rem">
+                                    <div class="flex justify-between items-center">
+                                        Module
+                                    </div>
+                                </th>
+                                <th pSortableColumn="authorityType" style="min-width: 10rem">
+                                    <div class="flex justify-between items-center">
+                                        Authority type
+                                        <p-sortIcon field="authorityType" />
+                                        <p-columnFilter type="text" field="authorityType.libelle" display="menu"
+                                                        class="ml-auto" />
+                                    </div>
+                                </th>
+                                <th pSortableColumn="active">Status
+                                    <p-sortIcon field="active"></p-sortIcon>
+                                </th>
+                                <th style="max-width: 6rem">Actions</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-authority>
+                            <tr>
+                                <td>{{ authority.libelle }}</td>
+                                <td>{{ authority.module.moduleName }}</td>
+                                <td>{{ authority.authorityType.libelle }}</td>
+                                <td>
+                                    <p-button
+                                        [label]="authority.actif ? 'Actif' : 'Inactif'"
+                                        [severity]="authority.actif ? 'success' : 'danger'"
+                                        (click)="confirmActifAndDisactifAuth(authority.id,authority.actif)"
+                                    ></p-button>
+                                </td>
+                                <td>
+                                    <p-button icon="pi pi-pencil" class="mr-2" outlined
+                                              (click)="updateAuthority(authority.id) ;$event.stopPropagation()" />
+                                    <p-button icon="pi pi-trash" severity="danger" outlined
+                                              (click)="confirmDeleteAuth(authority.id) ;$event.stopPropagation()" />
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </p-tabpanel>
+            }
+        </p-tabpanels>
+    </p-tabs>
+}
+<p-dialog header="Confirmation" [(visible)]="displayActifConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>{{messageConfirmation}}</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="{{yesConfirmation}}" icon="pi pi-check" (click)="toggleModuleStatus()" severity="danger" outlined autofocus />
+        <p-button label="{{noConfirmation}}" icon="pi pi-times" (click)="cancelActifDisactif()" text />
+    </ng-template>
+</p-dialog>

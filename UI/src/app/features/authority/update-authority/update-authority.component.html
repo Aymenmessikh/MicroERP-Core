@@ -1,0 +1,48 @@
+<p-toolbar styleClass="mb-3">
+    <ng-template #start>
+        <div class="font-semibold text-xl">Update Authority</div>
+    </ng-template>
+</p-toolbar>
+<div class="card flex flex-col gap-8">
+    <form [formGroup]="updateAuthority" (ngSubmit)="updateAuthoritys()" class="flex flex-col gap-8">
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="Libelle">Libelle</label>
+                <input pInputText id="Libelle" type="text" formControlName="libelle" placeholder="Libelle" class="limited-width"/>
+                <small *ngIf="updateAuthority.get('libelle').invalid && updateAuthority.get('libelle').touched"
+                       class="text-red-500">
+                    Libelle is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label>Module</label>
+                <p-select [options]="modules" optionLabel="moduleName" optionValue="id"
+                          formControlName="moduleId" placeholder="Select Module" [virtualScroll]="true"
+                          [virtualScrollItemSize]="38" class="w-full md:w-96" />
+                <small *ngIf="updateAuthority.get('moduleId').invalid && updateAuthority.get('moduleId').touched"
+                       class="text-red-500">
+                    Module is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label>Authority Type</label>
+                <p-select [options]="authorityTypes" optionLabel="libelle" optionValue="id"
+                          formControlName="authorityTypeId" placeholder="Select Authority Type" [virtualScroll]="true"
+                          [virtualScrollItemSize]="38" class="w-full md:w-96" />
+                <small *ngIf="updateAuthority.get('authorityTypeId').invalid && updateAuthority.get('authorityTypeId').touched"
+                       class="text-red-500">
+                    Authority Type is required
+                </small>
+            </div>
+        </div>
+        <div class="flex justify-start">
+            <p-button label="Update" type="submit" class="w-50 h-12" [disabled]="updateAuthority.invalid || !hasChanged()" />
+            <p-button label="Cancel" class="cancel w-50 h-12" severity="danger" outlined (click)="cancel()" />
+        </div>
+    </form>
+</div>
+

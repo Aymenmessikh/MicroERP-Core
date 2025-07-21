@@ -1,0 +1,36 @@
+<p-toolbar styleClass="mb-3">
+    <ng-template #start>
+        <div class="font-semibold text-xl">Update Role</div>
+    </ng-template>
+</p-toolbar>
+<div class="card flex flex-col gap-8">
+    <form [formGroup]="updateRole" (ngSubmit)="updateRoles()" class="flex flex-col gap-8">
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="firstName">Libelle</label>
+                <input pInputText id="firstName" type="text" formControlName="libelle" placeholder="Libelle" class="limited-width"/>
+                <small *ngIf="updateRole.get('libelle').invalid && updateRole.get('libelle').touched"
+                       class="text-red-500">
+                    First Name is required
+                </small>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label>Module</label>
+                <p-select [options]="modules" optionLabel="moduleName" optionValue="id"
+                          formControlName="moduleId" placeholder="Select Module" [virtualScroll]="true"
+                          [virtualScrollItemSize]="38" class="w-full md:w-96" />
+                <small *ngIf="updateRole.get('moduleId').invalid && updateRole.get('moduleId').touched"
+                       class="text-red-500">
+                    Last Name is required
+                </small>
+            </div>
+        </div>
+        <div class="flex justify-start">
+            <p-button label="Update" type="submit" class="w-50 h-12" [disabled]="updateRole.invalid || !hasChanged()" />
+            <p-button label="Cancel" class="cancel w-50 h-12" severity="danger" outlined (click)="cancel()" />
+        </div>
+    </form>
+</div>
+

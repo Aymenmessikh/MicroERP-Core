@@ -1,0 +1,8 @@
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<ul class="breadcrumb-comments">
+    <li *ngFor="let item of items">
+        <span>{{ item.label }}</span>
+        <span class="comment" *ngIf="item.comment"> ({{ item.comment }})</span>
+    </li>
+</ul>

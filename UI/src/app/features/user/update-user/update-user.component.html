@@ -1,0 +1,43 @@
+<p-blockui [blocked]="isLoading"></p-blockui>
+<p-toolbar styleClass="mb-3">
+    <ng-template #start>
+        <div class="font-semibold text-xl">Update User</div>
+    </ng-template>
+</p-toolbar>
+<div class="card flex flex-col gap-8">
+    <form [formGroup]="updateUserForm" (ngSubmit)="updateUser()" class="flex flex-col gap-8">
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="firstName">First Name</label>
+                <input pInputText id="firstName" type="text" formControlName="firstName" />
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="lastName">Last Name</label>
+                <input pInputText id="lastName" type="text" formControlName="lastName" />
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="userName">User Name</label>
+                <input pInputText id="userName" type="text" formControlName="userName" />
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="email">Email</label>
+                <input pInputText id="email" type="text" formControlName="email" />
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-24">
+            <div class="flex flex-col grow basis-0 gap-2">
+                <label for="phoneNumber">Phone Number</label>
+                <input pInputText id="phoneNumber" type="text" formControlName="phoneNumber" />
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+            </div>
+        </div>
+        <div class="flex justify-start">
+            <p-button label="Update" type="submit" class="w-50 h-12" [disabled]="updateUserForm.invalid || !hasChanged()" />
+            <p-button label="Cancel" class="cancel w-50 h-12" (click)="cancel()" severity="danger" outlined />
+        </div>
+    </form>
+</div>
+
