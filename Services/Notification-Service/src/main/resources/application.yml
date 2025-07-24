@@ -2,6 +2,6 @@
 #  port: 8091
 spring:
   application:
-    name: Notification-Service
+    name: notification-service
   config:
     import: optional:configserver:http://localhost:8888

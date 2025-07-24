@@ -1,0 +1,88 @@
+server:
+  port: 8091
+
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: myGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: '*'
+            type:
+              mapping: userEvent:com.example.notificationservice.Listner.Modele.UserEvent
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/NFR
+  datasource:
+    url: jdbc:postgresql://localhost:5431/notification-db
+    username: notification
+    password: notification
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  auth:
+    converter:
+      resource-id: NFR
+      principle-attribute: preferred_username
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: notification-service
+
+twilio:
+  account-sid:
+  auth-token:
+  trial-number:
+
+permission-service:
+  uri: http://localhost:8089/api/v1/admin/permission
+  authority-param-name: authority
+  module-param-name: module
+  module-name: notification-module
+
+groupe-service:
+  uri : http://localhost:8089/api/v1/admin/profile/userUuid

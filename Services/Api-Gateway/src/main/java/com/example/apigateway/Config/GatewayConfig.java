@@ -19,6 +19,8 @@ public class GatewayConfig {
                 // Route pour Authentifcationservice
                 .route("authentification-service", r -> r.path("/api/v1/auth-service/**")
                         .uri("lb://authentification-service"))
+                .route("notification-service", r -> r.path("/api/v1/not-service/**")
+                        .uri("lb://notification-service"))
 //                 Route pour discovery-service (Eureka)
                 .route("discovery-service", r -> r.path("/eureka/**")
                         .uri("http://localhost:8761"))
